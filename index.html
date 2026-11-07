@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff8ef"><title>STAR AREEJ JUICE | استار أريج جوس</title>
+<style>
+:root{--bg:#fff8ef;--paper:#fffdf9;--ink:#25231f;--muted:#82786d;--orange:#f28a27;--peach:#ffd9b5;--green:#4d7b43;--line:#f1e5d8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{height:76px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#fffaf4ed;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:47px;height:47px;border-radius:15px;background:linear-gradient(145deg,#ffb85d,#f07827);color:white;display:grid;place-items:center;font-size:10px;font-weight:bold;text-align:center;line-height:1.2;box-shadow:0 5px 15px #f28a2733}
+.brand h1{font-size:22px;margin:0}.brand h1 span{color:var(--orange)}.brand small{color:var(--green);font-size:11px}
+.cartbtn,.primary{border:0;border-radius:24px;background:var(--orange);color:white;font-weight:bold;padding:12px 19px;box-shadow:0 5px 14px #f28a2730}
+.hero{margin:24px auto 12px;width:90%;max-width:1200px;min-height:320px;border-radius:30px;overflow:hidden;background:linear-gradient(105deg,#fff1dc,#ffe0bd 55%,#f8c78f);display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:34px 6%;position:relative}
+.hero:after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:#fff9;left:-90px;bottom:-170px}
+.hero-copy{z-index:1}.eyebrow{color:var(--green);font-weight:bold}.hero h2{font-size:clamp(32px,5vw,56px);line-height:1.2;margin:13px 0;color:#28251f}.hero h2 span{color:#e87920}.hero p{color:#65594d;font-size:16px;line-height:1.8}
+.hero-art{height:260px;display:flex;justify-content:center;align-items:center}.hero-art img{height:100%;max-width:100%;object-fit:contain;mix-blend-mode:multiply;border-radius:22px}
+.section{padding:25px 5%;max-width:1320px;margin:auto}.section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:17px}.section h3{font-size:24px;margin:0}.section h3 span{color:var(--orange)}.section-head small{color:var(--muted)}
+.category-nav{display:flex;gap:9px;overflow:auto;padding:3px 0 18px;scrollbar-width:thin}.cat{white-space:nowrap;border:1px solid #f0d9c4;color:#6a5746;background:#fffdf9;padding:10px 16px;border-radius:22px}.cat.active{background:var(--orange);color:white;border-color:var(--orange)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:16px}
+.product,.offer{background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 7px 22px #5a37100a;transition:.2s}.product:hover,.offer:hover{transform:translateY(-2px);box-shadow:0 12px 25px #5a371014}
+.visual{height:170px;background:linear-gradient(145deg,#fff3e5,#ffdfbd);display:grid;place-items:center;overflow:hidden}.visual img{width:100%;height:100%;object-fit:cover}.placeholder{color:#b7a18b;font-size:13px}
+.info{padding:14px}.info h4{margin:0 0 7px;font-size:16px}.info p{margin:0;color:var(--muted);font-size:12px;line-height:1.7;min-height:30px}
+.sizes{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0}.sizes button{font-size:11px;padding:7px 9px;border:1px solid #f0d9c4;background:#fffaf4;color:#665747;border-radius:9px}.sizes button.selected{background:#fff0df;border-color:var(--orange);color:#c56614;font-weight:bold}
+.price{color:#d96f19;font-weight:bold;margin:9px 0}.calories{display:inline-block;color:#55764c;background:#eff6eb;border-radius:15px;padding:5px 9px;font-size:11px;margin:0 0 10px}
+.add{width:100%;border:0;background:#fff0df;color:#c56614;padding:11px;border-radius:12px;font-weight:bold}.add:hover{background:var(--orange);color:white}
+.offer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:15px}.offer .visual{height:145px}.offer .info{padding:15px}.offer-price{color:#d96f19;font-weight:bold;font-size:18px}.old-price{text-decoration:line-through;color:#998d82;font-size:13px;margin-right:7px}
+.empty{background:#fffdf9;border:1px dashed #e8d7c6;border-radius:16px;padding:20px;text-align:center;color:var(--muted);grid-column:1/-1}
+footer{text-align:center;padding:32px 5%;color:var(--muted);border-top:1px solid var(--line);margin-top:24px;background:#fffaf4}
+.overlay{display:none;position:fixed;inset:0;background:#21170d77;z-index:10}.drawer{position:absolute;left:0;top:0;height:100%;width:min(440px,100%);background:#fffaf4;padding:22px;overflow:auto;border-right:1px solid var(--peach)}
+.drawerhead{display:flex;justify-content:space-between;align-items:center}.close{background:none;color:#333;border:0;font-size:25px}.cartline{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:13px 0}.cartline small{color:var(--muted)}.qty{display:flex;gap:8px;align-items:center}.qty button{background:#fff0df;color:#9d5416;border:0;border-radius:7px;padding:5px 10px}
+.field{width:100%;padding:12px;margin:7px 0 12px;border-radius:10px;border:1px solid #ead8c6;background:white;color:#333}.total{font-size:20px;color:#d96f19;font-weight:bold;margin:18px 0}.checkout{width:100%;padding:14px}.muted{color:var(--muted);font-size:12px}.hidden{display:none!important}
+@media(max-width:650px){header{height:68px;padding:0 4%}.brand h1{font-size:18px}.logo{width:41px;height:41px}.hero{width:92%;grid-template-columns:1fr;padding:26px 7%;text-align:center}.hero-art{height:170px;grid-row:1}.hero-copy{grid-row:2}.hero h2{font-size:34px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.visual{height:125px}.info{padding:10px}.info h4{font-size:14px}.section{padding:20px 4%}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">STAR<br>AREEJ<br>JUICE</div><div><h1>استار <span>أريج</span> جوس</h1><small>Fresh • Healthy • Delicious</small></div></div>
+ <button class="cartbtn" onclick="openCart()">السلة 🛒 <b id="count">0</b></button>
+</header>
+<section class="hero">
+ <div class="hero-copy"><div class="eyebrow">طازج • صحي • لذيذ</div><h2>ابدأ يومك<br><span>بانتعاش أريج</span></h2><p>عصائر طازجة وخلطاتنا المميزة، تُحضّر لك بكل حب من أجود الفواكه.</p><button class="primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">اكتشف المنيو</button></div>
+ <div class="hero-art"><img src="assets/designed-hero.jpg" alt="خلطة استار أريج جوس" onerror="this.style.display='none'"></div>
+</section>
+<section class="section" id="offersSection">
+ <div class="section-head"><h3>عروض <span>استار أريج</span></h3><small>عروضنا وخصوماتنا الحالية</small></div>
+ <div class="offer-grid" id="offers"><div class="empty">جاري تحميل العروض...</div></div>
+</section>
+<section class="section" id="menu">
+ <div class="section-head"><h3>اكتشف <span>قائمتنا</span></h3><small>اختر القسم ثم مشروبك المفضل</small></div>
+ <div class="category-nav" id="categories"></div>
+ <div class="grid" id="products"><div class="empty">جاري تحميل المنتجات...</div></div>
+</section>
+<footer><b style="color:#e87920">STAR AREEJ JUICE</b><p>لطلباتكم عبر واتساب</p><p>0596428119</p><a href="./admin.html">دخول الإدارة</a></footer>
+<div class="overlay" id="overlay"><div class="drawer">
+ <div class="drawerhead"><h2>سلة الطلبات</h2><button class="close" onclick="closeCart()">×</button></div>
+ <div id="cartitems"></div><div class="total" id="total">الإجمالي: 0 ريال</div>
+ <label>نوع الطلب</label><select id="ordertype" class="field" onchange="toggleOrderFields()"><option value="استلام من المحل">استلام من المحل</option><option value="طلب من الطاولة">طلب من الطاولة داخل المحل</option></select>
+ <div id="tableField" class="hidden"><label>رقم الطاولة</label><input id="tableNumber" class="field" inputmode="numeric" placeholder="مثال: 4"></div>
+ <label>طريقة الدفع</label><select id="paymentMethod" class="field"><option value="كاش">كاش</option><option value="إلكتروني عند المحل">دفع إلكتروني عند المحل (بطاقة / مدى)</option></select>
+ <p class="muted">ملاحظة: الدفع الإلكتروني داخل الموقع يحتاج ربط بوابة دفع تجارية. الخيار الحالي يعني الدفع بالبطاقة عند المحل.</p>
+ <label>الاسم</label><input id="customer" class="field" placeholder="اسم العميل">
+ <label>رقم الجوال</label><input id="phone" class="field" type="tel" placeholder="05xxxxxxxx">
+ <label>العنوان (للتوصيل)</label><input id="address" class="field" placeholder="الحي والشارع">
+ <label>ملاحظات</label><textarea id="notes" class="field" rows="2" placeholder="أي ملاحظات على الطلب"></textarea>
+ <button class="primary checkout" id="checkoutBtn" onclick="sendOrder()">تأكيد الطلب عبر واتساب</button><div id="orderMsg" class="muted"></div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://uueazbaowwoxretawtyr.supabase.co";
+const SUPABASE_KEY="sb_publishable_NtVd6UrvCCnZn-y4FINjEg_7fsI9_HB";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const STORE_PHONE="966596428119";
+const GROUPS=[
+ {label:"الكل",db:null},{label:"الخلطات",db:"خلطات خاصة"},{label:"العصائر الطازجة",db:"عصائر طازجة"},
+ {label:"الميلك شيك",db:"ميلك شيك"},{label:"السموذي",db:"سموذي"},{label:"الموهيتو",db:"الموهيتو"},
+ {label:"مشروبات الطاقة",db:"مشروبات الطاقة"},{label:"السلطات",db:"سلطة الفواكه"},
+ {label:"البكسات",db:"بوكسات الفواكه"},{label:"الجالونات",db:"الجوالين"}
+];
+let products=[],offers=[],activeGroup="الكل",cart=[],selectedSizes={};
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function priceOptions(p){
+ const v=p.prices||{};
+ if(p.category==="الجوالين"){
+  const keys=[["جالون 10 ريال","gallon10"],["جالون 12 ريال","gallon12"],["جالون 20 ريال","gallon20"],["جالون 25 ريال","gallon25"]];
+  const custom=keys.filter(x=>v[x[1]]!=null).map(x=>[x[0],Number(v[x[1]]),x[1]]);
+  if(custom.length)return custom;
+ }
+ if(p.category==="بوكسات الفواكه")return [["صغير",Number(v.small??70),"small"],["كبير",Number(v.large??125),"large"]];
+ return [["صغير",Number(v.small??5),"small"],["وسط",Number(v.medium??8),"medium"],["كبير",Number(v.large??10),"large"]];
+}
+function categoryButtons(){
+ document.getElementById("categories").innerHTML=GROUPS.map(g=>`<button class="cat ${activeGroup===g.label?"active":""}" onclick="setGroup('${esc(g.label)}')">${esc(g.label)}</button>`).join("");
+}
+function setGroup(label){activeGroup=label;categoryButtons();renderProducts();}
+function renderProducts(){
+ const list=document.getElementById("products"),group=GROUPS.find(g=>g.label===activeGroup);
+ const shown=products.filter(p=>!group||!group.db||p.category===group.db);
+ if(!shown.length){list.innerHTML='<div class="empty">لا توجد أصناف في هذا القسم حاليًا.</div>';return;}
+ list.innerHTML=shown.map(p=>{
+  const opts=priceOptions(p),selected=Math.min(selectedSizes[p.id]||0,opts.length-1),choice=opts[selected],img=p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:'<span class="placeholder">صورة الصنف قريبًا</span>';
+  const kcal=(p.calories||{})[choice[2]];
+  return `<article class="product"><div class="visual">${img}</div><div class="info"><h4>${esc(p.name)}</h4><p>${esc(p.description||"")}</p>
+  <div class="sizes">${opts.map((o,i)=>`<button class="${i===selected?"selected":""}" onclick="selectSize('${esc(String(p.id))}',${i})">${esc(o[0])}</button>`).join("")}</div>
+  <div class="price">${choice[1]} ريال</div>${kcal!=null?`<span class="calories">🔥 ${esc(kcal)} سعرة حرارية</span>`:""}
+  <button class="add" onclick="addToCart('${esc(String(p.id))}')">أضف إلى السلة +</button></div></article>`;
+ }).join("");
+}
+function selectSize(id,index){selectedSizes[id]=index;renderProducts();}
+function renderOffers(){
+ const el=document.getElementById("offers");
+ if(!offers.length){el.innerHTML='<div class="empty">لا توجد عروض متاحة حاليًا. تابعنا لمعرفة عروضنا القادمة.</div>';return;}
+ el.innerHTML=offers.map(o=>`<article class="offer"><div class="visual">${o.image_url?`<img src="${esc(o.image_url)}" alt="${esc(o.title)}">`:'<span class="placeholder">عرض استار أريج</span>'}</div><div class="info"><h4>${esc(o.title)}</h4><p>${esc(o.description||"")}</p><div class="offer-price">${o.price!=null?Number(o.price)+" ريال":""}${o.original_price!=null?`<span class="old-price">${Number(o.original_price)} ريال</span>`:""}</div></div></article>`).join("");
+}
+function addToCart(id){
+ const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+ const o=priceOptions(p)[selectedSizes[id]||0],key=String(p.id)+"-"+o[2],item=cart.find(x=>x.key===key);
+ if(item)item.qty++;else cart.push({key,id:p.id,name:p.name,size:o[0],price:o[1],qty:1});
+ updateCart();
+}
+function updateCart(){
+ document.getElementById("count").textContent=cart.reduce((a,x)=>a+x.qty,0);
+ document.getElementById("cartitems").innerHTML=cart.length?cart.map((x,i)=>`<div class="cartline"><div><b>${esc(x.name)}</b><br><small>${esc(x.size)} • ${x.price} ريال</small></div><div class="qty"><button onclick="changeQty(${i},-1)">−</button>${x.qty}<button onclick="changeQty(${i},1)">+</button></div></div>`).join(""):"السلة فارغة";
+ document.getElementById("total").textContent="الإجمالي: "+cart.reduce((a,x)=>a+x.price*x.qty,0)+" ريال";
+}
+function changeQty(i,n){cart[i].qty+=n;if(cart[i].qty<=0)cart.splice(i,1);updateCart();}
+function openCart(){document.getElementById("overlay").style.display="block";toggleOrderFields();}
+function toggleOrderFields(){const isTable=document.getElementById("ordertype").value==="طلب من الطاولة";document.getElementById("tableField").classList.toggle("hidden",!isTable);}
+function closeCart(){document.getElementById("overlay").style.display="none";}
+async function sendOrder(){
+ if(!cart.length){alert("السلة فارغة");return;}
+ const customer=document.getElementById("customer").value.trim(),phone=document.getElementById("phone").value.trim();
+ if(!customer||!phone){alert("فضلاً أدخل الاسم ورقم الجوال.");return;}
+ const type=document.getElementById("ordertype").value,tableNumber=document.getElementById("tableNumber").value.trim(),paymentMethod=document.getElementById("paymentMethod").value,notes=document.getElementById("notes").value.trim();
+ if(type==="طلب من الطاولة"&&!tableNumber){alert("فضلاً أدخل رقم الطاولة.");return;}
+ const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+ const order={customer_name:customer,phone,order_type:type,table_number:type==="طلب من الطاولة"?tableNumber:null,payment_method:paymentMethod,items:cart.map(x=>({name:x.name,size:x.size,qty:x.qty,price:x.price})),total,status:"جديد",notes};
+ const btn=document.getElementById("checkoutBtn");btn.disabled=true;document.getElementById("orderMsg").textContent="جارٍ تسجيل الطلب...";
+ const wa=window.open("about:blank","_blank");
+ try{
+  const {error}=await sb.from("orders").insert(order);if(error)throw error;
+  const lines=cart.map(x=>`- ${x.name} (${x.size}) × ${x.qty} = ${x.price*x.qty} ريال`).join("\n");
+  const message=`طلب جديد - STAR AREEJ JUICE\nالاسم: ${customer}\nالجوال: ${phone}\nنوع الطلب: ${type}\n${type==="طلب من الطاولة"?"رقم الطاولة: "+tableNumber+"\n":""}طريقة الدفع: ${paymentMethod}\n\nالطلب:\n${lines}\nالإجمالي: ${total} ريال\nملاحظات: ${notes}`;
+  if(wa)wa.location.href="https://wa.me/"+STORE_PHONE+"?text="+encodeURIComponent(message);
+  document.getElementById("orderMsg").textContent="تم تسجيل الطلب وإرساله إلى واتساب. شكرًا لك!";
+  cart=[];updateCart();
+ }catch(e){if(wa)wa.close();document.getElementById("orderMsg").textContent="تعذر تسجيل الطلب: "+e.message+" — يمكنك التواصل معنا عبر واتساب.";}
+ finally{btn.disabled=false;}
+}
+async function loadProducts(){
+ const {data,error}=await sb.from("products").select("*").eq("active",true).order("sort_order").order("id");
+ if(error){document.getElementById("products").innerHTML='<div class="empty">تعذر تحميل القائمة حاليًا.</div>';console.error(error);return;}
+ products=data||[];categoryButtons();renderProducts();
+}
+async function loadOffers(){
+ const {data,error}=await sb.from("store_offers").select("*").eq("active",true).order("sort_order").order("id");
+ if(error){document.getElementById("offers").innerHTML='<div class="empty">تعذر تحميل العروض حاليًا.</div>';console.error(error);return;}
+ const now=Date.now();offers=(data||[]).filter(o=>(!o.starts_at||new Date(o.starts_at).getTime()<=now)&&(!o.ends_at||new Date(o.ends_at).getTime()>=now));renderOffers();
+}
+function listenForChanges(){
+ sb.channel("star-areej-live").on("postgres_changes",{event:"*",schema:"public",table:"products"},loadProducts)
+ .on("postgres_changes",{event:"*",schema:"public",table:"store_offers"},loadOffers).subscribe();
+}
+async function init(){await Promise.all([loadProducts(),loadOffers()]);listenForChanges();}
+categoryButtons();updateCart();init();
+</script>
+</body></html>
