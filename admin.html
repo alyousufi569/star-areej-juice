@@ -1,330 +1,148 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>إدارة استار أريج جوس</title>
 <style>
 :root{--bg:#fff8ef;--paper:#fff;--ink:#29231d;--muted:#7b7065;--orange:#f28a27;--line:#efdfce}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
-header{background:#fff;padding:18px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0}
-h1{font-size:22px;margin:0}
-main{max-width:1100px;margin:28px auto;padding:0 16px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 24px #6a3c1010}
-h2{font-size:19px;margin:0 0 16px}
-.muted{color:var(--muted);font-size:13px}
-input,select,textarea{font:inherit;padding:11px;border:1px solid var(--line);border-radius:9px;background:white;width:100%;margin:6px 0 12px}
-button{font:inherit;border:0;border-radius:9px;padding:11px 16px;background:var(--orange);color:#fff;font-weight:bold;cursor:pointer}
-button.secondary{background:#f4eadf;color:#73431c}
-button.danger{background:#a83b2d}
-button:disabled{opacity:.5}
-.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-#app{display:none}
-.product{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.product strong{display:block}
-.product small{color:var(--muted)}
-.thumb{width:58px;height:58px;object-fit:cover;border-radius:10px;background:#fff1df}
-.status{padding:10px;border-radius:9px;background:#fff3df;margin:10px 0;white-space:pre-wrap}
-.ok{background:#e8f7e9;color:#205b2b}
-.err{background:#ffeded;color:#8b2118}
-@media(max-width:650px){.row{grid-template-columns:1fr}.product{grid-template-columns:1fr}.product .actions{justify-content:flex-start}}
-</style>
-</head>
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:#fff;padding:18px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+h1{font-size:22px;margin:0}main{max-width:1100px;margin:28px auto;padding:0 16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 24px #6a3c100d}
+h2{font-size:19px;margin:0 0 16px}.muted{color:var(--muted);font-size:13px;line-height:1.8}
+label{display:block;font-size:14px;margin:10px 0 5px}input,textarea{font:inherit;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff;width:100%;margin:5px 0 10px}
+textarea{min-height:75px}button{font:inherit;border:0;border-radius:9px;padding:11px 16px;background:var(--orange);color:#fff;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.55}.secondary{background:#f4eadf;color:#5c4530}.danger{background:#b42318}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.status{padding:10px 12px;border-radius:9px;background:#f5f1eb;margin-top:12px;font-size:14px;line-height:1.7}
+.err{background:#fff0ef;color:#b42318}.ok{background:#eaf8ef;color:#176b3a}.hidden{display:none!important}
+.product{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.thumb{width:60px;height:60px;object-fit:cover;border-radius:10px;background:#f4eadf}.product strong{display:block}.product small{color:var(--muted);display:block;line-height:1.7}
+.smallbtn{padding:7px 10px;font-size:13px}@media(max-width:650px){header{flex-direction:column}.row{grid-template-columns:1fr}.product{grid-template-columns:52px 1fr}.product .actions{grid-column:1/-1}.thumb{width:52px;height:52px}}
+</style></head>
 <body>
-
-<header>
-<div>
-<h1>لوحة إدارة استار أريج جوس</h1>
-<div class="muted">إدارة الأصناف والأسعار والصور — التعديلات تظهر للعملاء مباشرة</div>
-</div>
-<a href="./index.html">زيارة المتجر</a>
-</header>
-
+<header><div><h1>لوحة إدارة استار أريج جوس</h1><div class="muted">إدارة الأصناف والأسعار والصور — التعديلات تظهر للعملاء</div></div><a href="./index.html">زيارة المتجر</a></header>
 <main>
-<section id="login" class="card">
-<h2>تسجيل دخول المدير</h2>
-<p class="muted">أدخل بريد المدير، وسنرسل لك رابط دخول خاصًا إلى بريدك الإلكتروني.</p>
-<label>البريد الإلكتروني</label>
-<input id="email" type="email" autocomplete="username" placeholder="البريد الإلكتروني">
-<button id="loginBtn" onclick="login()">إرسال رابط الدخول</button>
-<div id="loginMsg" class="status">أدخل بريد المدير لإرسال رابط الدخول.</div>
-</section>
-
-<section id="app">
-<div class="card">
-<div class="actions" style="justify-content:space-between">
-<h2>الأصناف</h2>
-<div class="actions">
-<button class="secondary" onclick="seedDefaults()">إضافة قائمة الأصناف الأساسية</button>
-<button class="secondary" onclick="logout()">تسجيل الخروج</button>
-</div>
-</div>
-<p class="muted">يمكنك إضافة صنف جديد أو تعديل الاسم والقسم والوصف والأسعار والصورة. ارفع الصور بصيغة JPG أو PNG أو WebP، وبحد أقصى 5 ميجابايت.</p>
-<div id="msg" class="status">متصل بقاعدة البيانات.</div>
-</div>
-
-<div class="card">
-<h2 id="formTitle">إضافة صنف جديد</h2>
-<input type="hidden" id="productId">
-<div class="row">
-<div><label>اسم الصنف</label><input id="name" placeholder="مثال: عصير مانجو"></div>
-<div><label>القسم</label><input id="category" placeholder="مثال: عصائر طازجة"></div>
-</div>
-<label>الوصف</label>
-<textarea id="description" rows="2" placeholder="وصف مختصر للصنف"></textarea>
-<div class="row">
-<div><label>سعر الصغير</label><input id="small" type="number" min="0" step=".5" value="5"></div>
-<div><label>سعر الوسط</label><input id="medium" type="number" min="0" step=".5" value="8"></div>
-<div><label>سعر الكبير</label><input id="large" type="number" min="0" step=".5" value="10"></div>
-</div>
-<label>صورة الصنف (اختياري)</label>
-<input id="image" type="file" accept="image/png,image/jpeg,image/webp">
-<div class="actions">
-<button onclick="saveProduct()">حفظ الصنف</button>
-<button class="secondary" onclick="resetForm()">إلغاء / صنف جديد</button>
-</div>
-</div>
-
-<div class="card">
-<h2>قائمة الأصناف الحالية</h2>
-<div id="productsList" class="muted">جارٍ التحميل...</div>
-</div>
-</section>
-</main>
-
+<section id="login" class="card"><h2>تسجيل دخول المدير</h2><p class="muted">أدخل البريد الإلكتروني وكلمة المرور الخاصة بحساب المدير.</p>
+<label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" value="alyousufi569@gmail.com" placeholder="البريد الإلكتروني">
+<label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+<div class="actions"><button id="loginBtn" onclick="login()">دخول لوحة التحكم</button><button class="secondary" onclick="requestPasswordReset()">نسيت كلمة المرور؟</button></div>
+<div id="loginMsg" class="status">هذه اللوحة مخصصة لحساب المدير فقط.</div></section>
+<section id="passwordReset" class="card hidden"><h2>تعيين كلمة مرور جديدة</h2><p class="muted">اكتب كلمة المرور الجديدة بعد فتح رابط الاستعادة الذي وصلك إلى بريدك.</p>
+<label for="newPassword">كلمة المرور الجديدة</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8 أحرف على الأقل">
+<label for="confirmPassword">تأكيد كلمة المرور</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="أعد كتابة كلمة المرور">
+<button id="updatePasswordBtn" onclick="updatePassword()">حفظ كلمة المرور الجديدة</button><div id="resetMsg" class="status">اختر كلمة مرور قوية لا تشاركها مع أحد.</div></section>
+<section id="app" class="hidden">
+<div class="card"><div class="actions" style="justify-content:space-between"><h2>الأصناف</h2><div class="actions"><button class="secondary" onclick="seedDefaults()">إضافة القائمة الأساسية</button><button class="secondary" onclick="logout()">تسجيل الخروج</button></div></div><div id="msg" class="status">جاري التحميل...</div></div>
+<div class="card"><h2 id="formTitle">إضافة صنف جديد</h2><input type="hidden" id="productId">
+<label>اسم الصنف</label><input id="name" placeholder="مثال: عصير فراولة"><label>القسم</label><input id="category" placeholder="مثال: عصائر طازجة">
+<label>الوصف</label><textarea id="description" placeholder="وصف مختصر للصنف"></textarea>
+<div class="row"><div><label>السعر الصغير</label><input id="small" type="number" min="0" step=".5" value="5"></div><div><label>السعر الوسط</label><input id="medium" type="number" min="0" step=".5" value="8"></div><div><label>السعر الكبير</label><input id="large" type="number" min="0" step=".5" value="10"></div><div><label>ترتيب العرض</label><input id="sortOrder" type="number" value="0"></div></div>
+<label>صورة الصنف (اختياري)</label><input id="image" type="file" accept="image/png,image/jpeg,image/webp">
+<div class="actions"><button id="saveBtn" onclick="saveProduct()">حفظ الصنف</button><button class="secondary" onclick="resetForm()">إلغاء / صنف جديد</button></div></div>
+<div class="card"><h2>قائمة الأصناف الحالية</h2><div id="productsList" class="muted">جاري التحميل...</div></div>
+</section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const URL="https://uueazbaowwoxretawtyr.supabase.co";
-const KEY="sb_publishable_NtVd6UrvCCnZn-y4FINjEg_7fsI9_HB";
-const db=window.supabase.createClient(URL,KEY);
-let currentProducts=[];
-
-function message(id,text,kind=""){
- const el=document.getElementById(id);
- el.textContent=text;
- el.className="status "+kind;
-}
-
-/* تسجيل الدخول بالرابط السحري */
+"use strict";
+const SUPABASE_URL="https://uueazbaowwoxretawtyr.supabase.co";
+const SUPABASE_KEY="sb_publishable_NtVd6UrvCCnZn-y4FINjEg_7fsI9_HB";
+const IMAGE_BUCKET="product-images";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentProducts=[],busy=false;
+function message(id,text,kind=""){const e=document.getElementById(id);if(e){e.textContent=text;e.className="status "+kind;}}
+function showLogin(text="أدخل بريد المدير لإرسال رابط الدخول.",kind=""){document.getElementById("login").classList.remove("hidden");document.getElementById("app").classList.add("hidden");message("loginMsg",text,kind);}
+function showApp(){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");}
 async function login(){
+ if(busy)return;
  const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
  const btn=document.getElementById("loginBtn");
-
- if(!email){
-  message("loginMsg","أدخل بريدك الإلكتروني.","err");
-  return;
- }
-
- btn.disabled=true;
-
+ if(!email||!password){message("loginMsg","أدخل البريد الإلكتروني وكلمة المرور.","err");return;}
+ busy=true;btn.disabled=true;message("loginMsg","جارٍ التحقق من بيانات الدخول...");
  try{
-  const {error}=await db.auth.signInWithOtp({
-   email:email,
-   options:{
-    shouldCreateUser:false,
-    emailRedirectTo:"https://alyousufi569.github.io/star-areej-juice/admin.html"
-   }
-  });
-
-  if(error){
-   message("loginMsg","تعذر إرسال الرابط: "+error.message,"err");
-  }else{
-   message("loginMsg","تم إرسال رابط الدخول إلى بريدك. افتح الرسالة واضغط الرابط.");
-  }
- }catch(error){
-  message("loginMsg","حدث خطأ: "+error.message,"err");
- }finally{
-  btn.disabled=false;
- }
+  const {error}=await db.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  await checkAdmin();
+ }catch(e){message("loginMsg","تعذر تسجيل الدخول: "+e.message,"err");}
+ finally{busy=false;btn.disabled=false;}
 }
 
-/* التحقق من صلاحية المدير — لا تحذف هذه الدالة */
+async function requestPasswordReset(){
+ const email=document.getElementById("email").value.trim();
+ if(!email){message("loginMsg","أدخل بريدك الإلكتروني أولاً.","err");return;}
+ try{
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:"https://alyousufi569.github.io/star-areej-juice/admin.html"});
+  if(error)throw error;
+  message("loginMsg","إذا كان البريد مسجلاً، ستصلك رسالة لاستعادة كلمة المرور. افتحها واتبع الرابط.","ok");
+ }catch(e){message("loginMsg","تعذر إرسال رسالة الاستعادة: "+e.message,"err");}
+}
+
+async function updatePassword(){
+ const password=document.getElementById("newPassword").value;
+ const confirm=document.getElementById("confirmPassword").value;
+ if(password.length<8){message("resetMsg","اجعل كلمة المرور 8 أحرف على الأقل.","err");return;}
+ if(password!==confirm){message("resetMsg","كلمتا المرور غير متطابقتين.","err");return;}
+ const btn=document.getElementById("updatePasswordBtn");btn.disabled=true;
+ try{
+  const {error}=await db.auth.updateUser({password});
+  if(error)throw error;
+  message("resetMsg","تم تحديث كلمة المرور بنجاح.","ok");
+  document.getElementById("passwordReset").classList.add("hidden");
+  document.getElementById("password").value=password;
+  await checkAdmin();
+ }catch(e){message("resetMsg","تعذر تحديث كلمة المرور: "+e.message,"err");}
+ finally{btn.disabled=false;}
+}
+
+/* فحص صلاحية المدير — لا تحذف هذه الدالة */
 async function checkAdmin(){
- const {data:{user}}=await db.auth.getUser();
-
- if(!user){
-  document.getElementById("login").style.display="block";
-  document.getElementById("app").style.display="none";
-  return;
- }
-
- const {data,error}=await db.from("store_admins")
-  .select("user_id")
-  .eq("user_id",user.id)
-  .maybeSingle();
-
- if(error||!data){
-  await db.auth.signOut();
-  message("loginMsg","هذا الحساب ليس لديه صلاحية مدير. تأكد من حساب المدير الذي أضفته في قاعدة البيانات.","err");
-  document.getElementById("login").style.display="block";
-  document.getElementById("app").style.display="none";
-  return;
- }
-
- document.getElementById("login").style.display="none";
- document.getElementById("app").style.display="block";
- await loadProducts();
+ try{const {data:{user},error:authError}=await db.auth.getUser();if(authError)throw authError;
+ if(!user){showLogin();return;}
+ const {data,error}=await db.from("store_admins").select("user_id").eq("user_id",user.id).maybeSingle();
+ if(error||!data){await db.auth.signOut();showLogin("هذا الحساب ليس لديه صلاحية مدير. تأكد من إضافة user_id الصحيح في جدول store_admins.","err");return;}
+ showApp();await loadProducts();
+ }catch(e){showLogin("حدث خطأ أثناء التحقق: "+e.message,"err");}
 }
-
-async function logout(){
- await db.auth.signOut();
- document.getElementById("app").style.display="none";
- document.getElementById("login").style.display="block";
- message("loginMsg","تم تسجيل الخروج.");
-}
-
+async function logout(){await db.auth.signOut();currentProducts=[];showLogin("تم تسجيل الخروج.");}
 async function loadProducts(){
- const {data,error}=await db.from("products").select("*").order("sort_order").order("id");
- if(error){
-  message("msg","خطأ في تحميل الأصناف: "+error.message,"err");
-  return;
- }
- currentProducts=data||[];
- drawProducts();
+ message("msg","جاري تحميل الأصناف...");
+ const {data,error}=await db.from("products").select("*").order("sort_order",{ascending:true}).order("id",{ascending:true});
+ if(error){message("msg","خطأ في تحميل الأصناف: "+error.message,"err");return;}
+ currentProducts=data||[];drawProducts();message("msg","تم تحميل "+currentProducts.length+" صنف.","ok");
 }
-
 function drawProducts(){
- const el=document.getElementById("productsList");
- if(!currentProducts.length){
-  el.innerHTML="لا توجد أصناف حالياً. اضغط «إضافة قائمة الأصناف الأساسية» أو أضف صنفاً جديداً.";
-  return;
- }
-
- el.innerHTML=currentProducts.map(p=>`
- <div class="product">
- ${p.image_url?`<img class="thumb" src="${p.image_url}">`:`<div class="thumb"></div>`}
- <div>
- <strong>${esc(p.name)}</strong>
- <small>${esc(p.category)} · ${p.active?"ظاهر للعملاء":"مخفي عن العملاء"}</small>
- <div class="muted">صغير ${p.prices.small??"-"} · وسط ${p.prices.medium??"-"} · كبير ${p.prices.large??"-"} ريال</div>
- </div>
- <div class="actions">
- <button class="secondary" onclick="editProduct(${p.id})">تعديل</button>
- <button class="secondary" onclick="toggleActive(${p.id},${!p.active})">${p.active?"إخفاء":"إظهار"}</button>
- <button class="danger" onclick="deleteProduct(${p.id})">حذف</button>
- </div>
- </div>`).join("");
+ const list=document.getElementById("productsList");list.innerHTML="";
+ if(!currentProducts.length){list.textContent="لا توجد أصناف حاليًا.";return;}
+ currentProducts.forEach(p=>{
+  const row=document.createElement("div");row.className="product";const img=document.createElement("img");img.className="thumb";img.alt=p.name||"صورة الصنف";img.src=p.image_url||"";if(!p.image_url)img.style.visibility="hidden";
+  const info=document.createElement("div"),title=document.createElement("strong"),detail=document.createElement("small");title.textContent=p.name||"صنف";const prices=p.prices||{};
+  detail.textContent=(p.category||"")+" — صغير "+(prices.small??"-")+" / وسط "+(prices.medium??"-")+" / كبير "+(prices.large??"-")+(p.active===false?" — مخفي":" — ظاهر");info.append(title,detail);
+  const actions=document.createElement("div");actions.className="actions";const edit=document.createElement("button");edit.className="secondary smallbtn";edit.textContent="تعديل";edit.onclick=()=>editProduct(p.id);
+  const toggle=document.createElement("button");toggle.className="secondary smallbtn";toggle.textContent=p.active===false?"إظهار":"إخفاء";toggle.onclick=()=>toggleActive(p.id,p.active!==false);
+  const del=document.createElement("button");del.className="danger smallbtn";del.textContent="حذف";del.onclick=()=>deleteProduct(p.id,p.name);actions.append(edit,toggle,del);row.append(img,info,actions);list.append(row);
+ });
 }
-
-function esc(s){
- return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function editProduct(id){const p=currentProducts.find(x=>String(x.id)===String(id));if(!p)return;const v=p.prices||{};
+ document.getElementById("productId").value=p.id;document.getElementById("name").value=p.name||"";document.getElementById("category").value=p.category||"";document.getElementById("description").value=p.description||"";
+ document.getElementById("small").value=v.small??5;document.getElementById("medium").value=v.medium??8;document.getElementById("large").value=v.large??10;document.getElementById("sortOrder").value=p.sort_order??0;
+ document.getElementById("image").value="";document.getElementById("formTitle").textContent="تعديل الصنف";document.getElementById("saveBtn").textContent="حفظ التعديلات";document.getElementById("formTitle").scrollIntoView({behavior:"smooth"});
 }
-
-function resetForm(){
- ["productId","name","category","description"].forEach(id=>document.getElementById(id).value="");
- document.getElementById("small").value=5;
- document.getElementById("medium").value=8;
- document.getElementById("large").value=10;
- document.getElementById("image").value="";
- document.getElementById("formTitle").textContent="إضافة صنف جديد";
-}
-
-function editProduct(id){
- const p=currentProducts.find(x=>x.id===id);
- if(!p)return;
- document.getElementById("productId").value=p.id;
- document.getElementById("name").value=p.name;
- document.getElementById("category").value=p.category;
- document.getElementById("description").value=p.description||"";
- document.getElementById("small").value=p.prices.small??5;
- document.getElementById("medium").value=p.prices.medium??8;
- document.getElementById("large").value=p.prices.large??10;
- document.getElementById("formTitle").textContent="تعديل: "+p.name;
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
+function resetForm(){["productId","name","category","description"].forEach(id=>document.getElementById(id).value="");document.getElementById("small").value=5;document.getElementById("medium").value=8;document.getElementById("large").value=10;document.getElementById("sortOrder").value=currentProducts.length;document.getElementById("image").value="";document.getElementById("formTitle").textContent="إضافة صنف جديد";document.getElementById("saveBtn").textContent="حفظ الصنف";}
+async function uploadImage(file){const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");const path="products/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+ext;
+ const {error}=await db.storage.from(IMAGE_BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type||"image/jpeg"});if(error)throw error;return db.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl;}
 async function saveProduct(){
- const id=document.getElementById("productId").value;
- const name=document.getElementById("name").value.trim();
- const category=document.getElementById("category").value.trim();
-
- if(!name||!category){
-  message("msg","اكتب اسم الصنف والقسم أولاً.","err");
-  return;
- }
-
- let image_url=currentProducts.find(p=>String(p.id)===id)?.image_url||null;
- const file=document.getElementById("image").files[0];
-
- if(file){
-  if(file.size>5*1024*1024){
-   message("msg","حجم الصورة أكبر من 5 ميجابايت.","err");
-   return;
-  }
-  const ext=file.name.split(".").pop().toLowerCase();
-  const path=`${crypto.randomUUID()}.${ext}`;
-  const {error:upErr}=await db.storage.from("product-images").upload(path,file,{upsert:true,contentType:file.type});
-  if(upErr){
-   message("msg","تعذر رفع الصورة: "+upErr.message,"err");
-   return;
-  }
-  image_url=db.storage.from("product-images").getPublicUrl(path).data.publicUrl;
- }
-
- const payload={
-  name,
-  category,
-  description:document.getElementById("description").value.trim(),
-  image_url,
-  prices:{
-   small:Number(document.getElementById("small").value),
-   medium:Number(document.getElementById("medium").value),
-   large:Number(document.getElementById("large").value)
-  },
-  active:true,
-  updated_at:new Date().toISOString()
- };
-
- const result=id
-  ?await db.from("products").update(payload).eq("id",Number(id))
-  :await db.from("products").insert(payload);
-
- if(result.error){
-  message("msg","تعذر الحفظ: "+result.error.message,"err");
-  return;
- }
-
- message("msg","تم حفظ الصنف بنجاح.","ok");
- resetForm();
- await loadProducts();
+ if(busy)return;const name=document.getElementById("name").value.trim(),category=document.getElementById("category").value.trim();if(!name||!category){message("msg","اكتب اسم الصنف والقسم أولاً.","err");return;}
+ busy=true;const btn=document.getElementById("saveBtn");btn.disabled=true;message("msg","جارٍ حفظ الصنف...");
+ try{const id=document.getElementById("productId").value;const row={name,category,description:document.getElementById("description").value.trim(),prices:{small:Number(document.getElementById("small").value||0),medium:Number(document.getElementById("medium").value||0),large:Number(document.getElementById("large").value||0)},sort_order:Number(document.getElementById("sortOrder").value||0)};
+ const file=document.getElementById("image").files[0];if(file)row.image_url=await uploadImage(file);
+ const result=id?await db.from("products").update(row).eq("id",id):await db.from("products").insert({...row,active:true});
+ if(result.error)throw result.error;message("msg",id?"تم تحديث الصنف.":"تمت إضافة الصنف.","ok");resetForm();await loadProducts();
+ }catch(e){message("msg","تعذر حفظ الصنف: "+e.message,"err");}finally{busy=false;btn.disabled=false;}
 }
-
-async function toggleActive(id,active){
- const {error}=await db.from("products").update({active}).eq("id",id);
- if(error)message("msg",error.message,"err");
- else{
-  message("msg","تم تحديث حالة الصنف.","ok");
-  await loadProducts();
- }
-}
-
-async function deleteProduct(id){
- if(!confirm("هل تريد حذف هذا الصنف نهائياً؟"))return;
- const {error}=await db.from("products").delete().eq("id",id);
- if(error)message("msg",error.message,"err");
- else{
-  message("msg","تم حذف الصنف.","ok");
-  await loadProducts();
- }
-}
-
+async function toggleActive(id,active){const {error}=await db.from("products").update({active:!active}).eq("id",id);if(error){message("msg","تعذر تغيير الحالة: "+error.message,"err");return;}await loadProducts();}
+async function deleteProduct(id,name){if(!confirm('هل تريد حذف الصنف "'+name+'" نهائيًا؟'))return;const {error}=await db.from("products").delete().eq("id",id);if(error){message("msg","تعذر الحذف: "+error.message,"err");return;}await loadProducts();resetForm();}
 const defaults=[
-["خلطة استار أريج جوس","خلطات خاصة","خلطتنا المميزة",5,8,10],
-["خلطة عرائسي","خلطات خاصة","مانجو وتمور وحليب",5,8,10],
-["خلطة جي","خلطات خاصة","خلطة فواكه منعشة",5,8,10],
-["خلطة سوبر جي","خلطات خاصة","مزيج فواكه بالحليب",5,8,10],
-["كوكتيل استار أريج جوس","خلطات خاصة","كوكتيل استار المميز",5,8,10],
-["خلطة أصفهاني","خلطات خاصة","خلطة فواكه",5,8,10],
-["خلطة عوار قلب","خلطات خاصة","خلطة غنية بالفواكه",5,8,10],
-["خلطة فرنسي","خلطات خاصة","مزيج منعش",5,8,10],
-["خلطة إيطالي","خلطات خاصة","مزيج فواكه",5,8,10],
-["خلطة هاواي","خلطات خاصة","طعم استوائي",5,8,10],
-["عصير مانجو","عصائر طازجة","عصير مانجو طازج",5,8,10],
-["عصير برتقال","عصائر طازجة","عصير برتقال طازج",5,8,10],
-["عصير أفوكادو","عصائر طازجة","عصير أفوكادو",5,8,10],
 ["عصير فراولة","عصائر طازجة","عصير فراولة",5,8,10],
 ["ميلك شيك","ميلك شيك","نكهات متنوعة",5,8,10],
 ["سموذي","سموذي","سموذي فواكه",5,8,10],
@@ -334,24 +152,25 @@ const defaults=[
 ["بوكس سلطة فواكه كبير","بوكسات الفواكه","بوكس كبير",125,125,125],
 ["جالون عصير","الجوالين","اختر السعر المناسب",10,12,20]
 ];
-
-async function seedDefaults(){
- if(currentProducts.length&&!confirm("توجد أصناف حالياً. هل تريد إضافة الأصناف الأساسية أيضاً؟"))return;
- const rows=defaults.map((p,i)=>({
-  name:p[0],category:p[1],description:p[2],
-  prices:{small:p[3],medium:p[4],large:p[5]},
-  active:true,sort_order:i
- }));
- const {error}=await db.from("products").insert(rows);
- if(error){
-  message("msg","تعذر إضافة القائمة: "+error.message,"err");
-  return;
+async function seedDefaults(){if(currentProducts.length&&!confirm("توجد أصناف حالياً. هل تريد إضافة الأصناف الأساسية أيضاً؟"))return;
+ const rows=defaults.map((p,i)=>({name:p[0],category:p[1],description:p[2],prices:{small:p[3],medium:p[4],large:p[5]},active:true,sort_order:i}));
+ const {error}=await db.from("products").insert(rows);if(error){message("msg","تعذر إضافة القائمة: "+error.message,"err");return;}await loadProducts();message("msg","تمت إضافة القائمة الأساسية.","ok");}
+let recoveryMode=window.location.hash.includes("type=recovery");
+db.auth.onAuthStateChange((event)=>{
+ if(event==="PASSWORD_RECOVERY"){
+  recoveryMode=true;
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("passwordReset").classList.remove("hidden");
  }
- message("msg","تمت إضافة القائمة الأساسية. يمكنك تعديلها وإضافة الصور الآن.","ok");
- await loadProducts();
-}
-
-db.auth.getSession().then(checkAdmin);
-</script>
-</body>
-</html>
+});
+db.auth.getSession().then(({data,error})=>{
+ if(error){showLogin("تعذر قراءة الجلسة: "+error.message,"err");return;}
+ if(recoveryMode){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("passwordReset").classList.remove("hidden");
+ }else if(data.session){checkAdmin();}
+ else{showLogin();}
+});
+</script></body></html>
