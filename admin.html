@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إدارة استار أريج جوس</title>
+<style>
+:root{--bg:#fff8ef;--paper:#fff;--ink:#29231d;--muted:#7b7065;--orange:#f28a27;--line:#efdfce}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:#fff;padding:18px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0}
+h1{font-size:22px;margin:0}main{max-width:1100px;margin:28px auto;padding:0 16px}.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 6px 24px #6a3c1010}
+h2{font-size:19px;margin:0 0 16px}.muted{color:var(--muted);font-size:13px}
+input,select,textarea{font:inherit;padding:11px;border:1px solid var(--line);border-radius:9px;background:white;width:100%;margin:6px 0 12px}
+button{font:inherit;border:0;border-radius:9px;padding:11px 16px;background:var(--orange);color:#fff;font-weight:bold;cursor:pointer}
+button.secondary{background:#f4eadf;color:#73431c}button.danger{background:#a83b2d}button:disabled{opacity:.5}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#app{display:none}.product{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.product strong{display:block}.product small{color:var(--muted)}.thumb{width:58px;height:58px;object-fit:cover;border-radius:10px;background:#fff1df}
+.status{padding:10px;border-radius:9px;background:#fff3df;margin:10px 0;white-space:pre-wrap}.ok{background:#e8f7e9;color:#205b2b}.err{background:#ffeded;color:#8b2118}
+@media(max-width:650px){.row{grid-template-columns:1fr}.product{grid-template-columns:1fr}.product .actions{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<header><div><h1>لوحة إدارة استار أريج جوس</h1><div class="muted">إدارة الأصناف والأسعار والصور — التعديلات تظهر للعملاء مباشرة</div></div><a href="./index.html">زيارة المتجر</a></header>
+<main>
+<section id="login" class="card">
+<h2>تسجيل دخول المدير</h2>
+<p class="muted">استخدم البريد وكلمة المرور لحساب المدير المسجل في Supabase.</p>
+<label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="username" placeholder="البريد الإلكتروني">
+<label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+<button id="loginBtn" onclick="login()">دخول لوحة التحكم</button>
+<div id="loginMsg" class="status">يلزم تسجيل الدخول للوصول إلى الإدارة.</div>
+</section>
+<section id="app">
+<div class="card">
+<div class="actions" style="justify-content:space-between"><h2>الأصناف</h2><div class="actions"><button class="secondary" onclick="seedDefaults()">إضافة قائمة الأصناف الأساسية</button><button class="secondary" onclick="logout()">تسجيل الخروج</button></div></div>
+<p class="muted">يمكنك إضافة صنف جديد أو تعديل الاسم والقسم والوصف والأسعار والصورة. ارفع الصور بصيغة JPG أو PNG أو WebP، وبحد أقصى 5 ميجابايت.</p>
+<div id="msg" class="status">متصل بقاعدة البيانات.</div>
+</div>
+<div class="card">
+<h2 id="formTitle">إضافة صنف جديد</h2>
+<input type="hidden" id="productId">
+<div class="row">
+<div><label>اسم الصنف</label><input id="name" placeholder="مثال: عصير مانجو"></div>
+<div><label>القسم</label><input id="category" placeholder="مثال: عصائر طازجة"></div>
+</div>
+<label>الوصف</label><textarea id="description" rows="2" placeholder="وصف مختصر للصنف"></textarea>
+<div class="row">
+<div><label>سعر الصغير</label><input id="small" type="number" min="0" step=".5" value="5"></div>
+<div><label>سعر الوسط</label><input id="medium" type="number" min="0" step=".5" value="8"></div>
+<div><label>سعر الكبير</label><input id="large" type="number" min="0" step=".5" value="10"></div>
+</div>
+<label>صورة الصنف (اختياري)</label><input id="image" type="file" accept="image/png,image/jpeg,image/webp">
+<div class="actions"><button onclick="saveProduct()">حفظ الصنف</button><button class="secondary" onclick="resetForm()">إلغاء / صنف جديد</button></div>
+</div>
+<div class="card"><h2>قائمة الأصناف الحالية</h2><div id="productsList" class="muted">جارٍ التحميل...</div></div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const URL="https://uueazbaowwoxretawtyr.supabase.co";
+const KEY="sb_publishable_NtVd6UrvCCnZn-y4FINjEg_7fsI9_HB";
+const db=window.supabase.createClient(URL,KEY);
+let currentProducts=[];
+function message(id,text,kind=""){const el=document.getElementById(id);el.textContent=text;el.className="status "+kind;}
+async function login(){
+ const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+ if(!email||!password){message("loginMsg","أدخل البريد وكلمة المرور.");return;}
+ document.getElementById("loginBtn").disabled=true;
+ const {error}=await db.auth.signInWithPassword({email,password});
+ document.getElementById("loginBtn").disabled=false;
+ if(error){message("loginMsg","تعذر الدخول: "+error.message,"err");return;}
+ await checkAdmin();
+}
+async function checkAdmin(){
+ const {data:{user}}=await db.auth.getUser();
+ if(!user){document.getElementById("login").style.display="block";document.getElementById("app").style.display="none";return;}
+ const {data,error}=await db.from("store_admins").select("user_id").eq("user_id",user.id).maybeSingle();
+ if(error||!data){await db.auth.signOut();message("loginMsg","هذا الحساب ليس لديه صلاحية مدير. تأكد من حساب المدير الذي أضفته في قاعدة البيانات.","err");return;}
+ document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";await loadProducts();
+}
+async function logout(){await db.auth.signOut();document.getElementById("app").style.display="none";document.getElementById("login").style.display="block";message("loginMsg","تم تسجيل الخروج.");}
+async function loadProducts(){
+ const {data,error}=await db.from("products").select("*").order("sort_order").order("id");
+ if(error){message("msg","خطأ في تحميل الأصناف: "+error.message,"err");return;}
+ currentProducts=data||[];drawProducts();
+}
+function drawProducts(){
+ const el=document.getElementById("productsList");
+ if(!currentProducts.length){el.innerHTML="لا توجد أصناف حالياً. اضغط «إضافة قائمة الأصناف الأساسية» أو أضف صنفاً جديداً.";return;}
+ el.innerHTML=currentProducts.map(p=>`<div class="product">${p.image_url?`<img class="thumb" src="${p.image_url}">`:`<div class="thumb"></div>`}<div><strong>${esc(p.name)}</strong><small>${esc(p.category)} · ${p.active?"ظاهر للعملاء":"مخفي عن العملاء"}</small><div class="muted">صغير ${p.prices.small??"-"} · وسط ${p.prices.medium??"-"} · كبير ${p.prices.large??"-"} ريال</div></div><div class="actions"><button class="secondary" onclick="editProduct(${p.id})">تعديل</button><button class="secondary" onclick="toggleActive(${p.id},${!p.active})">${p.active?"إخفاء":"إظهار"}</button><button class="danger" onclick="deleteProduct(${p.id})">حذف</button></div></div>`).join("");
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function resetForm(){["productId","name","category","description"].forEach(id=>document.getElementById(id).value="");document.getElementById("small").value=5;document.getElementById("medium").value=8;document.getElementById("large").value=10;document.getElementById("image").value="";document.getElementById("formTitle").textContent="إضافة صنف جديد";}
+function editProduct(id){const p=currentProducts.find(x=>x.id===id);if(!p)return;document.getElementById("productId").value=p.id;document.getElementById("name").value=p.name;document.getElementById("category").value=p.category;document.getElementById("description").value=p.description||"";document.getElementById("small").value=p.prices.small??5;document.getElementById("medium").value=p.prices.medium??8;document.getElementById("large").value=p.prices.large??10;document.getElementById("formTitle").textContent="تعديل: "+p.name;window.scrollTo({top:0,behavior:"smooth"});}
+async function saveProduct(){
+ const id=document.getElementById("productId").value,name=document.getElementById("name").value.trim(),category=document.getElementById("category").value.trim();
+ if(!name||!category){message("msg","اكتب اسم الصنف والقسم أولاً.","err");return;}
+ let image_url=currentProducts.find(p=>String(p.id)===id)?.image_url||null;
+ const file=document.getElementById("image").files[0];
+ if(file){if(file.size>5*1024*1024){message("msg","حجم الصورة أكبر من 5 ميجابايت.","err");return;}const ext=file.name.split(".").pop().toLowerCase(),path=`${crypto.randomUUID()}.${ext}`;const {error:upErr}=await db.storage.from("product-images").upload(path,file,{upsert:true,contentType:file.type});if(upErr){message("msg","تعذر رفع الصورة: "+upErr.message,"err");return;}image_url=db.storage.from("product-images").getPublicUrl(path).data.publicUrl;}
+ const payload={name,category,description:document.getElementById("description").value.trim(),image_url,prices:{small:Number(document.getElementById("small").value),medium:Number(document.getElementById("medium").value),large:Number(document.getElementById("large").value)},active:true,updated_at:new Date().toISOString()};
+ const result=id?await db.from("products").update(payload).eq("id",Number(id)):await db.from("products").insert(payload);
+ if(result.error){message("msg","تعذر الحفظ: "+result.error.message,"err");return;}
+ message("msg","تم حفظ الصنف بنجاح. ستظهر التغييرات للعملاء بعد تحديث القائمة مباشرة.","ok");resetForm();await loadProducts();
+}
+async function toggleActive(id,active){const {error}=await db.from("products").update({active}).eq("id",id);if(error)message("msg",error.message,"err");else{message("msg","تم تحديث حالة الصنف.","ok");await loadProducts();}}
+async function deleteProduct(id){if(!confirm("هل تريد حذف هذا الصنف نهائياً؟"))return;const {error}=await db.from("products").delete().eq("id",id);if(error)message("msg",error.message,"err");else{message("msg","تم حذف الصنف.","ok");await loadProducts();}}
+const defaults=[
+["خلطة استار أريج جوس","خلطات خاصة","خلطتنا المميزة",5,8,10],["خلطة عرائسي","خلطات خاصة","مانجو وتمور وحليب",5,8,10],["خلطة جي","خلطات خاصة","خلطة فواكه منعشة",5,8,10],["خلطة سوبر جي","خلطات خاصة","مزيج فواكه بالحليب",5,8,10],
+["كوكتيل استار أريج جوس","خلطات خاصة","كوكتيل استار المميز",5,8,10],["خلطة أصفهاني","خلطات خاصة","خلطة فواكه",5,8,10],["خلطة عوار قلب","خلطات خاصة","خلطة غنية بالفواكه",5,8,10],["خلطة فرنسي","خلطات خاصة","مزيج منعش",5,8,10],["خلطة إيطالي","خلطات خاصة","مزيج فواكه",5,8,10],["خلطة هاواي","خلطات خاصة","طعم استوائي",5,8,10],
+["عصير مانجو","عصائر طازجة","عصير مانجو طازج",5,8,10],["عصير برتقال","عصائر طازجة","عصير برتقال طازج",5,8,10],["عصير أفوكادو","عصائر طازجة","عصير أفوكادو",5,8,10],["عصير فراولة","عصائر طازجة","عصير فراولة",5,8,10],
+["ميلك شيك","ميلك شيك","نكهات متنوعة",5,8,10],["سموذي","سموذي","سموذي فواكه",5,8,10],["مشروبات الطاقة","مشروبات الطاقة","مشروبات الطاقة",5,8,10],
+["سلطة فواكه","سلطة الفواكه","سلطة فواكه طازجة",12,15,25],["بوكس سلطة فواكه صغير","بوكسات الفواكه","بوكس صغير",70,70,70],["بوكس سلطة فواكه كبير","بوكسات الفواكه","بوكس كبير",125,125,125],["جالون عصير","الجوالين","اختر السعر المناسب",10,12,20]
+];
+async function seedDefaults(){
+ if(currentProducts.length&&!confirm("توجد أصناف حالياً. هل تريد إضافة الأصناف الأساسية أيضاً؟"))return;
+ const rows=defaults.map((p,i)=>({name:p[0],category:p[1],description:p[2],prices:{small:p[3],medium:p[4],large:p[5]},active:true,sort_order:i}));
+ const {error}=await db.from("products").insert(rows);
+ if(error){message("msg","تعذر إضافة القائمة: "+error.message,"err");return;}
+ message("msg","تمت إضافة القائمة الأساسية. يمكنك تعديلها وإضافة الصور الآن.","ok");await loadProducts();
+}
+db.auth.getSession().then(checkAdmin);
+</script>
+</body></html>
