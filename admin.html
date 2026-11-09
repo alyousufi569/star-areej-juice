@@ -59,7 +59,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:right;
 <section id="tab-orders" class="tab hidden"><div class="card"><h2>طلبات العملاء</h2><div id="orderList">جاري تحميل الطلبات...</div></div></section>
 <section id="tab-settings" class="tab hidden"><div class="card"><h2>إعدادات الحساب</h2><label>تغيير البريد الإلكتروني</label><input id="newEmail" type="email" placeholder="البريد الجديد"><button class="secondary" onclick="changeEmail()">تحديث البريد</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><label>تغيير كلمة المرور</label><input id="settingsPassword" type="password" minlength="8" placeholder="كلمة مرور جديدة"><button onclick="changePassword()">تحديث كلمة المرور</button><div id="settingsMsg" class="status"></div></div></section>
 </section></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 "use strict";
 const URL="https://uueazbaowwoxretawtyr.supabase.co",KEY="sb_publishable_NtVd6UrvCCnZn-y4FINjEg_7fsI9_HB",BUCKET="product-images";
